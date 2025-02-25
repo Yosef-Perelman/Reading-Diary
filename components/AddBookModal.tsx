@@ -107,14 +107,18 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
                 selectedValue={bookData.rating}
                 onValueChange={(value) => setBookData({ ...bookData, rating: value })}
                 style={styles.picker}
+                itemStyle={styles.pickerItem}
                 dropdownIconColor="#8E8E93">
-                {[...Array(10)].map((_, i) => (
-                  <Picker.Item
-                    key={i + 1}
-                    label={(i + 1).toString()}
-                    value={(i + 1).toString()}
-                  />
-                ))}
+                {[...Array(10)].map((_, i) => {
+                  const value = (i + 1).toString();
+                  return (
+                    <Picker.Item
+                      key={value}
+                      label={`                                                                      ${value}`}
+                      value={value}
+                    />
+                  );
+                })}
               </Picker>
             </View>
 
@@ -241,5 +245,12 @@ const styles = StyleSheet.create({
     height: 50,
     direction: 'rtl',
     color: '#2C2C2C',
+  },
+  pickerItem: {
+    fontSize: 16,
+    textAlign: 'right',
+    backgroundColor: '#F7F7F7',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E2E2',
   },
 });
