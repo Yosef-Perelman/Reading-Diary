@@ -168,25 +168,25 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   sortContainer: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
     paddingHorizontal: 16,
     marginBottom: 8,
   },
   sortLabel: {
     fontSize: 16,
-    marginRight: 8,
+    marginLeft: 8,
     color: '#8E8E93',
     fontWeight: '500',
   },
   sortButtons: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
   },
   sortButton: {
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: 20,
-    marginLeft: 8,
+    marginRight: 8,
     backgroundColor: '#FFFFFF',
   },
   sortButtonActive: {
