@@ -46,21 +46,6 @@ export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
         <Text style={styles.date}>{book.date}</Text>
       </View>
 
-      <View style={styles.actions}>
-        <Pressable
-          onPress={() => onEdit(book)}
-          style={[styles.actionButton, styles.editButton]}>
-          <Ionicons name="pencil" size={16} color="#007AFF" />
-          <Text style={[styles.actionText, styles.editText]}>עריכה</Text>
-        </Pressable>
-        <Pressable
-          onPress={handleDelete}
-          style={[styles.actionButton, styles.deleteButton]}>
-          <Ionicons name="trash" size={16} color="#FF3B30" />
-          <Text style={[styles.actionText, styles.deleteText]}>מחיקה</Text>
-        </Pressable>
-      </View>
-
       {book.description && (
         <Pressable
           onPress={() => setExpanded(!expanded)}
@@ -77,6 +62,21 @@ export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
       {expanded && book.description && (
         <Text style={styles.description}>{book.description}</Text>
       )}
+
+      <View style={styles.actions}>
+        <Pressable
+          onPress={() => onEdit(book)}
+          style={[styles.actionButton, styles.editButton]}>
+          <Ionicons name="pencil" size={16} color="#007AFF" />
+          <Text style={[styles.actionText, styles.editText]}>עריכה</Text>
+        </Pressable>
+        <Pressable
+          onPress={handleDelete}
+          style={[styles.actionButton, styles.deleteButton]}>
+          <Ionicons name="trash" size={16} color="#FF3B30" />
+          <Text style={[styles.actionText, styles.deleteText]}>מחיקה</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -157,9 +157,8 @@ const styles = StyleSheet.create({
   },
   actions: {
     flexDirection: 'row-reverse',
-    justifyContent: 'flex-start',
+    justifyContent: 'flex-end',
     marginTop: 8,
-    marginBottom: 8,
     borderTopWidth: 1,
     borderTopColor: '#F2F2F7',
     paddingTop: 8,
@@ -170,7 +169,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     paddingHorizontal: 8,
     borderRadius: 8,
-    marginLeft: 8,
+    marginRight: 8,
   },
   actionText: {
     fontSize: 14,
