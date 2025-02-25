@@ -49,11 +49,15 @@ export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
       {book.description && (
         <>
           <View style={styles.descriptionHeader}>
-            <Text 
-              style={styles.description}
-              numberOfLines={expanded ? undefined : 1}>
-              {book.description}
-            </Text>
+            <Pressable 
+              onPress={() => setExpanded(!expanded)}
+              style={styles.descriptionTextContainer}>
+              <Text 
+                style={styles.description}
+                numberOfLines={expanded ? undefined : 1}>
+                {book.description}
+              </Text>
+            </Pressable>
             <Pressable
               onPress={() => setExpanded(!expanded)}
               style={styles.expandButton}>
@@ -148,13 +152,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#F2F2F7',
   },
-  description: {
+  descriptionTextContainer: {
     flex: 1,
+    marginLeft: 10,
+  },
+  description: {
     fontSize: 16,
     color: '#8E8E93',
     lineHeight: 24,
     textAlign: 'right',
-    marginLeft: 10,
   },
   expandButton: {
     paddingTop: 4,
