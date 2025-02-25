@@ -47,20 +47,24 @@ export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
       </View>
 
       {book.description && (
-        <Pressable
-          onPress={() => setExpanded(!expanded)}
-          style={styles.descriptionHeader}>
-          <Text style={styles.descriptionTitle}>תיאור</Text>
-          {expanded ? (
-            <Ionicons name="chevron-up" size={20} color="#8E8E93" />
-          ) : (
-            <Ionicons name="chevron-down" size={20} color="#8E8E93" />
-          )}
-        </Pressable>
-      )}
-
-      {expanded && book.description && (
-        <Text style={styles.description}>{book.description}</Text>
+        <>
+          <View style={styles.descriptionHeader}>
+            <Text 
+              style={styles.description}
+              numberOfLines={expanded ? undefined : 1}>
+              {book.description}
+            </Text>
+            <Pressable
+              onPress={() => setExpanded(!expanded)}
+              style={styles.expandButton}>
+              {expanded ? (
+                <Ionicons name="chevron-up" size={20} color="#8E8E93" />
+              ) : (
+                <Ionicons name="chevron-down" size={20} color="#8E8E93" />
+              )}
+            </Pressable>
+          </View>
+        </>
       )}
 
       <View style={styles.actions}>
@@ -138,22 +142,22 @@ const styles = StyleSheet.create({
   },
   descriptionHeader: {
     flexDirection: 'row-reverse',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     paddingVertical: 8,
     borderTopWidth: 1,
     borderTopColor: '#F2F2F7',
   },
-  descriptionTitle: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: '#8E8E93',
-  },
   description: {
+    flex: 1,
     fontSize: 14,
     color: '#8E8E93',
     lineHeight: 20,
     textAlign: 'right',
+    marginLeft: 8,
+  },
+  expandButton: {
+    paddingTop: 2,
   },
   actions: {
     flexDirection: 'row-reverse',
