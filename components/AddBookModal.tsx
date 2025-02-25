@@ -16,9 +16,10 @@ interface AddBookModalProps {
   visible: boolean;
   onClose: () => void;
   editingBook?: Book | null;
+  testID?: string;
 }
 
-export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProps) {
+export function AddBookModal({ visible, onClose, editingBook, testID }: AddBookModalProps) {
   const addBook = useBookStore((state) => state.addBook);
   const updateBook = useBookStore((state) => state.updateBook);
   const [bookData, setBookData] = useState({
@@ -72,7 +73,13 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
   };
 
   return (
-    <Modal visible={visible} animationType="slide" transparent>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+      testID={testID}
+    >
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <ScrollView>

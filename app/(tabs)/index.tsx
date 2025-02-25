@@ -150,7 +150,8 @@ export default function BooksScreen() {
 
       <Pressable
         style={styles.addButton}
-        onPress={() => setModalVisible(true)}>
+        onPress={() => setModalVisible(true)}
+        testID="add-button">
         <Ionicons name="add" size={24} color="white" />
       </Pressable>
 
@@ -158,6 +159,7 @@ export default function BooksScreen() {
         visible={modalVisible}
         onClose={handleCloseModal}
         editingBook={editingBook}
+        testID="add-book-modal"
       />
     </View>
   );
