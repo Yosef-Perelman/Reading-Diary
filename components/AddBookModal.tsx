@@ -23,7 +23,7 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
   const updateBook = useBookStore((state) => state.updateBook);
   const [bookData, setBookData] = useState({
     name: '',
-    genre: '',
+    genre: 'עיון',
     rating: '1',
     description: '',
   });
@@ -37,7 +37,7 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
         description: editingBook.description || '',
       });
     } else {
-      setBookData({ name: '', genre: '', rating: '1', description: '' });
+      setBookData({ name: '', genre: 'עיון', rating: '1', description: '' });
     }
   }, [editingBook]);
 
@@ -89,12 +89,17 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
             />
 
             <Text style={styles.label}>ז'אנר</Text>
-            <TextInput
-              style={styles.input}
-              value={bookData.genre}
-              onChangeText={(text) => setBookData({ ...bookData, genre: text })}
-              textAlign="right"
-            />
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={bookData.genre}
+                onValueChange={(value) => setBookData({ ...bookData, genre: value })}
+                style={styles.picker}
+                dropdownIconColor="#8E8E93">
+                <Picker.Item label="עיון" value="עיון" />
+                <Picker.Item label="פרוזה" value="פרוזה" />
+                <Picker.Item label="אחר" value="אחר" />
+              </Picker>
+            </View>
 
             <Text style={styles.label}>דירוג (1-10)</Text>
             <View style={styles.pickerContainer}>
