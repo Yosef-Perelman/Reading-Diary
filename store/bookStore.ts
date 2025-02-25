@@ -12,6 +12,8 @@ interface BookState {
   setSortOption: (option: SortOption) => void;
   loadBooks: () => Promise<void>;
   saveBooks: () => Promise<void>;
+  deleteBook: (bookId: string) => Promise<void>;
+  updateBook: (book: Book) => Promise<void>;
 }
 
 export const useBookStore = create<BookState>((set, get) => ({
@@ -50,5 +52,19 @@ export const useBookStore = create<BookState>((set, get) => ({
     } catch (error) {
       console.error('Error saving books:', error);
     }
+  },
+
+  deleteBook: async (bookId) => {
+    set((state) => ({
+      books: state.books.filter((book) => book.id !== bookId),
+    }));
+    await get().saveBooks();
+  },
+
+  updateBook: async (book) => {
+    set((state) => ({
+      books: state.books.map((b) => (b.id === book.id ? book : b)),
+    }));
+    await get().saveBooks();
   },
 }));

@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Book } from '../types/book';
 
 interface BookCardProps {
   book: Book;
+  onEdit: (book: Book) => void;
+  onDelete: (bookId: string) => void;
 }
 
-export function BookCard({ book }: BookCardProps) {
+export function BookCard({ book, onEdit, onDelete }: BookCardProps) {
   const [expanded, setExpanded] = useState(false);
+
+  const handleDelete = () => {
+    Alert.alert(
+      'מחיקת ספר',
+      'האם אתה בטוח שברצונך למחוק ספר זה?',
+      [
+        {
+          text: 'ביטול',
+          style: 'cancel',
+        },
+        {
+          text: 'מחק',
+          onPress: () => onDelete(book.id),
+          style: 'destructive',
+        },
+      ],
+      { cancelable: true }
+    );
+  };
 
   return (
     <View style={styles.card}>
@@ -23,6 +44,21 @@ export function BookCard({ book }: BookCardProps) {
       <View style={styles.metadata}>
         <Text style={styles.genre}>{book.genre}</Text>
         <Text style={styles.date}>{book.date}</Text>
+      </View>
+
+      <View style={styles.actions}>
+        <Pressable
+          onPress={() => onEdit(book)}
+          style={[styles.actionButton, styles.editButton]}>
+          <Ionicons name="pencil" size={16} color="#007AFF" />
+          <Text style={[styles.actionText, styles.editText]}>עריכה</Text>
+        </Pressable>
+        <Pressable
+          onPress={handleDelete}
+          style={[styles.actionButton, styles.deleteButton]}>
+          <Ionicons name="trash" size={16} color="#FF3B30" />
+          <Text style={[styles.actionText, styles.deleteText]}>מחיקה</Text>
+        </Pressable>
       </View>
 
       {book.description && (
@@ -58,7 +94,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
   },
   header: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 8,
@@ -70,7 +106,7 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   rating: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
     backgroundColor: '#F2F2F7',
     paddingHorizontal: 8,
@@ -78,13 +114,13 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   ratingText: {
-    marginLeft: 4,
+    marginRight: 4,
     fontSize: 14,
     color: '#000000',
     fontWeight: '500',
   },
   metadata: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     justifyContent: 'space-between',
     marginBottom: 8,
   },
@@ -98,9 +134,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#8E8E93',
     fontWeight: '500',
+    textAlign: 'right',
   },
   descriptionHeader: {
-    flexDirection: 'row',
+    flexDirection: 'row-reverse',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 8,
@@ -117,5 +154,39 @@ const styles = StyleSheet.create({
     color: '#8E8E93',
     lineHeight: 20,
     textAlign: 'right',
+  },
+  actions: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'flex-start',
+    marginTop: 8,
+    marginBottom: 8,
+    borderTopWidth: 1,
+    borderTopColor: '#F2F2F7',
+    paddingTop: 8,
+  },
+  actionButton: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    borderRadius: 8,
+    marginLeft: 8,
+  },
+  actionText: {
+    fontSize: 14,
+    fontWeight: '500',
+    marginRight: 4,
+  },
+  editButton: {
+    backgroundColor: '#007AFF15',
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B3015',
+  },
+  editText: {
+    color: '#007AFF',
+  },
+  deleteText: {
+    color: '#FF3B30',
   },
 });

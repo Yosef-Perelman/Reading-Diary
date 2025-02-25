@@ -11,16 +11,40 @@ import { Ionicons } from '@expo/vector-icons';
 import { BookCard } from '../../components/BookCard';
 import { AddBookModal } from '../../components/AddBookModal';
 import { useBookStore } from '../../store/bookStore';
-import { SortOption } from '../../types/book';
+import { SortOption, Book } from '../../types/book';
 
 export default function BooksScreen() {
   const [modalVisible, setModalVisible] = useState(false);
-  const { books, searchQuery, sortOption, setSearchQuery, setSortOption, loadBooks } =
-    useBookStore();
+  const [editingBook, setEditingBook] = useState<Book | null>(null);
+  const { 
+    books, 
+    searchQuery, 
+    sortOption, 
+    setSearchQuery, 
+    setSortOption, 
+    loadBooks,
+    deleteBook,
+    updateBook 
+  } = useBookStore();
 
   useEffect(() => {
     loadBooks();
   }, []);
+
+  const handleEdit = (book: Book) => {
+    setEditingBook(book);
+    setModalVisible(true);
+  };
+
+  const handleDelete = async (bookId: string) => {
+    await deleteBook(bookId);
+    loadBooks();
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
+    setEditingBook(null);
+  };
 
   const filteredBooks = books
     .filter((book) =>
@@ -113,7 +137,13 @@ export default function BooksScreen() {
 
       <FlatList
         data={filteredBooks}
-        renderItem={({ item }) => <BookCard book={item} />}
+        renderItem={({ item }) => (
+          <BookCard 
+            book={item} 
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
+        )}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.list}
       />
@@ -126,7 +156,8 @@ export default function BooksScreen() {
 
       <AddBookModal
         visible={modalVisible}
-        onClose={() => setModalVisible(false)}
+        onClose={handleCloseModal}
+        editingBook={editingBook}
       />
     </View>
   );

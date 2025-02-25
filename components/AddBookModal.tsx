@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   View,
@@ -14,10 +14,12 @@ import { useBookStore } from '../store/bookStore';
 interface AddBookModalProps {
   visible: boolean;
   onClose: () => void;
+  editingBook?: Book | null;
 }
 
-export function AddBookModal({ visible, onClose }: AddBookModalProps) {
+export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProps) {
   const addBook = useBookStore((state) => state.addBook);
+  const updateBook = useBookStore((state) => state.updateBook);
   const [bookData, setBookData] = useState({
     name: '',
     genre: '',
@@ -25,21 +27,45 @@ export function AddBookModal({ visible, onClose }: AddBookModalProps) {
     description: '',
   });
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    if (editingBook) {
+      setBookData({
+        name: editingBook.name,
+        genre: editingBook.genre,
+        rating: editingBook.rating.toString(),
+        description: editingBook.description || '',
+      });
+    } else {
+      setBookData({ name: '', genre: '', rating: '', description: '' });
+    }
+  }, [editingBook]);
+
+  const handleSubmit = async () => {
     if (!bookData.name || !bookData.genre || !bookData.rating) {
       return;
     }
 
-    const newBook: Book = {
-      id: Date.now().toString(),
-      name: bookData.name,
-      genre: bookData.genre,
-      rating: Number(bookData.rating),
-      description: bookData.description,
-      date: new Date().toLocaleDateString('he-IL'),
-    };
+    if (editingBook) {
+      const updatedBook: Book = {
+        ...editingBook,
+        name: bookData.name,
+        genre: bookData.genre,
+        rating: Number(bookData.rating),
+        description: bookData.description,
+      };
+      await updateBook(updatedBook);
+    } else {
+      const newBook: Book = {
+        id: Date.now().toString(),
+        name: bookData.name,
+        genre: bookData.genre,
+        rating: Number(bookData.rating),
+        description: bookData.description,
+        date: new Date().toLocaleDateString('he-IL'),
+      };
+      addBook(newBook);
+    }
 
-    addBook(newBook);
     setBookData({ name: '', genre: '', rating: '', description: '' });
     onClose();
   };
@@ -49,7 +75,9 @@ export function AddBookModal({ visible, onClose }: AddBookModalProps) {
       <View style={styles.modalContainer}>
         <View style={styles.modalContent}>
           <ScrollView>
-            <Text style={styles.title}>הוספת ספר חדש</Text>
+            <Text style={styles.title}>
+              {editingBook ? 'עריכת ספר' : 'הוספת ספר חדש'}
+            </Text>
 
             <Text style={styles.label}>שם הספר</Text>
             <TextInput
@@ -92,7 +120,9 @@ export function AddBookModal({ visible, onClose }: AddBookModalProps) {
 
             <View style={styles.buttonContainer}>
               <Pressable style={styles.submitButton} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>הוסף ספר</Text>
+                <Text style={styles.buttonText}>
+                  {editingBook ? 'שמור שינויים' : 'הוסף ספר'}
+                </Text>
               </Pressable>
               <Pressable style={styles.cancelButton} onPress={onClose}>
                 <Text style={styles.cancelButtonText}>ביטול</Text>
