@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     color: '#000',
     textAlign: 'center',
     marginVertical: 20,
-    marginTop: 50,
+    marginTop: 80,
     fontFamily: 'System',
   },
   searchContainer: {
