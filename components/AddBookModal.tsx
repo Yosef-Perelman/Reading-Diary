@@ -8,6 +8,7 @@ import {
   Pressable,
   ScrollView,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker';
 import { Book } from '../types/book';
 import { useBookStore } from '../store/bookStore';
 
@@ -23,7 +24,7 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
   const [bookData, setBookData] = useState({
     name: '',
     genre: '',
-    rating: '',
+    rating: '1',
     description: '',
   });
 
@@ -36,7 +37,7 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
         description: editingBook.description || '',
       });
     } else {
-      setBookData({ name: '', genre: '', rating: '', description: '' });
+      setBookData({ name: '', genre: '', rating: '1', description: '' });
     }
   }, [editingBook]);
 
@@ -66,7 +67,7 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
       addBook(newBook);
     }
 
-    setBookData({ name: '', genre: '', rating: '', description: '' });
+    setBookData({ name: '', genre: '', rating: '1', description: '' });
     onClose();
   };
 
@@ -96,14 +97,21 @@ export function AddBookModal({ visible, onClose, editingBook }: AddBookModalProp
             />
 
             <Text style={styles.label}>דירוג (1-10)</Text>
-            <TextInput
-              style={styles.input}
-              value={bookData.rating}
-              onChangeText={(text) => setBookData({ ...bookData, rating: text })}
-              keyboardType="numeric"
-              maxLength={2}
-              textAlign="right"
-            />
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={bookData.rating}
+                onValueChange={(value) => setBookData({ ...bookData, rating: value })}
+                style={styles.picker}
+                dropdownIconColor="#8E8E93">
+                {[...Array(10)].map((_, i) => (
+                  <Picker.Item
+                    key={i + 1}
+                    label={(i + 1).toString()}
+                    value={(i + 1).toString()}
+                  />
+                ))}
+              </Picker>
+            </View>
 
             <Text style={styles.label}>תיאור (אופציונלי)</Text>
             <TextInput
@@ -202,5 +210,18 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '600',
+  },
+  pickerContainer: {
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 8,
+    marginBottom: 16,
+    overflow: 'hidden',
+  },
+  picker: {
+    width: '100%',
+    height: 50,
+    direction: 'rtl',
   },
 });
