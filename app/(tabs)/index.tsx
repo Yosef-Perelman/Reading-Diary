@@ -45,6 +45,7 @@ export default function BooksScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.pageTitle}>מה קראתי עכשיו?</Text>
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -135,6 +136,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F2F2F7',
+  },
+  pageTitle: {
+    fontSize: 40,
+    fontWeight: 'bold',
+    color: '#000',
+    textAlign: 'center',
+    marginVertical: 20,
+    marginTop: 50,
+    fontFamily: 'System',
   },
   searchContainer: {
     flexDirection: 'row',
